@@ -63,7 +63,7 @@ $(document).ready(function(){
         var id = $(this).attr('href');
 
         // assign the window with matching id to the activeWindow variable, move it to the center of the screen and fade in
-        activeWindow = $('.modal-window' + id).css('opacity', '0').css('top', '5%').css('left', '10%').fadeTo(500, 1);
+        activeWindow = $('.modal-window' + id).css('opacity', '0').css('top', '20%').css('left', '10%').fadeTo(500, 1);
 
         // create blind and fade in
         $('#modal')
@@ -77,12 +77,16 @@ $(document).ready(function(){
 
     });
 
-    $('a.close').click(function(e){
+    $('a.close .x-icon').click(function(e){
             // cancel default behaviour
             e.preventDefault();
 
             // call the closeModal function passing this close button's window
             closeModal();
+    });
+
+    $("button").on("click", function() {
+        $(this).toggleClass("button-active");
     });     
 
     function closeModal()
@@ -95,5 +99,8 @@ $(document).ready(function(){
         $('#blind').fadeOut(250,    function(){ $(this).remove(); });
 
     }
+
+
+
 
 });

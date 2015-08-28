@@ -20,6 +20,7 @@
     under the License.
 -->
 <html ng-app="waterBank">
+
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
@@ -29,6 +30,7 @@
         
         <!--style-->
         <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/reset.css" />
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css' />
         
         <!--js-->
@@ -37,52 +39,103 @@
         <script src="bower_components/jquery/dist/jquery.min.js"></script>
         <script src="js/app.js"></script>
         <script src="js/controllers.js"></script>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
+        <script src="cordova.js"></script>
+        <script src="js/index.js"></script>
 
         <title>WaterBank</title>
     </head>
     <body>
         <div class="app">
-            <navigation class="nav">
+            <div class="header">
                 <h1 class="title"><span class="title-light">Water</span><span class="title-bold">Bank</span></h1>
                 <a href="#info-modal" class="modal-link"><img class="info-icon" src="img/info-icon.png"></a>
-            </navigation>
+            </div>
             <div class="main" ng-controller="waterBankCtrl">
                 <div class="circle">
                     <div class="circle-value money">
-                        <span class="money-value">{{waterObj.dollars}}</span>
+                        <span class="circle-title">Dollars</span><br>
+                        <span class="money-value">${{waterObj.dollars}}</span>
                     </div>
                     <div class="circle-value calories">
-                        <span class="calorie-value">{{waterObj.calories}}</span>
+                        <span class="circle-title">Calories</span><br>
+                        <span class="calorie-value">{{waterObj.calories | number}}</span>
                     </div>
                 </div>
                 <div class="landing-info">
                     <p>You've Saved About <span class="money-value">${{waterObj.dollars}}</span> <br> &amp; <br>
-                        About <span class="calorie-value">{{waterObj.calories}}</span> calories</p>
+                        About <span class="calorie-value">{{waterObj.calories | number}}</span> calories</p>
                 </div>
-                <button class="drank-water" ng-click="drankWater()">
-                    I drank Water
-                </button>
-            </div>
-            <div id="modal">
-                <div id="info-modal" class="modal-window">
-                <a href="#" class="close"><img class="x-icon" src="img/x-icon.png" width="40" height="40"></a>
-                    <div class="modal-content">
-                        <h2 class="modal-title">What is <span class="title-light">Water</span><span class="title-bold">Bank</span>?</h3>
-                        <hr>
-                        <p class="modal-text">WaterBank allows you to make a simple choice - to drink water. Each time you decide to fill up your water bottle or opt for a water cup when you eat out, log it with the app! You'll be surprised how much money, and calories, you'll end up saving. It's a simple app, for a simple choice.</p> 
+                <div class="navigation">
+                    <ul>
+                        <li class="clear-button" ng-click="clearTotals()" ontouchstart="return true;">
+                            <!-- <img class="icon icon-circle-x" src="open-iconic/svg/circle-x.svg" alt="circle-x"> -->
+                            <svg class="icon icon-circle-x" viewBox="0 0 8 8">
+                                <use xlink:href="open-iconic/sprite/open-iconic.svg#circle-x"></use>
+                            </svg>
+                        </li>
+                        <li class="droplet-button" ng-click="drankWater()" ontouchstart="return true;">
+                                <svg class="icon icon-droplet" viewBox="0 0 8 8">
+                                    <use xlink:href="open-iconic/sprite/open-iconic.svg#droplet"></use>
+                                </svg>
+                        </li>
+                        <li class="settings-button" ng-click="openSettingsModal()" ontouchstart="return true;">
+                            <!-- <img class="icon icon-settings" src="open-iconic/svg/cog.svg" alt="settings"> -->
+                            <svg class="icon icon-settings" viewBox="0 0 8 8">
+                                <use xlink:href="open-iconic/sprite/open-iconic.svg#cog"></use>
+                            </svg>
+                        </li>
+                    </ul>
+                </div>
+                <!--INFO MODAL-->
+                <div id="modal">
+                    <div id="info-modal" class="modal-window">
+                        <a class="close" href="#" ><img class="x-icon" src="img/x-icon.png" width="40" height="40"></a>
+                        <div class="modal-content">
+                            <h2 class="modal-title">What is <span class="title-light">Water</span><span class="title-bold">Bank</span>?</h2>
+                            <hr>
+                            <p class="modal-text">WaterBank allows you to make a simple choice - to drink water. Each time you decide to fill up your water bottle or opt for a water cup when you eat out, log it with the app! You'll be surprised how much money, and calories, you'll end up saving. It's a simple app, for a simple choice.</p> 
+                        </div>
+                    </div>
+                </div> 
+                <!--SETTINGS MODAL-->
+                    <div class="settings-modal is-hidden">
+                        <div class="header">
+                            <h1 class="title"><span class="title-light">Settings</span></h1>
+                        </div>
+                        <div class="settings-modal-cat">
+                            <h2>Averages</h2>
+                        </div>
+                            <ul class="settings-features">
+                                <li><label>Price</label><input type="number" pattern="[0-9]*" ng-model="waterObj.dollAvg"></input></li>
+                                <li><label>Calories</label><input type="number" pattern="[0-9]*" ng-model="waterObj.calAvg"></input></li>
+                            </ul>
+                        
+                        <button id="close-button" ng-click="closeSettingsModal()" class="bold"> Close </button>
                     </div>
                 </div>
-            </div>
-
+                       
             <!-- <div id="deviceready" class="blink">
                 <p class="event listening">Connecting to Device</p>
                 <p class="event received">Device is Ready</p>
             </div> -->
-        </div>
+        
+        </div> <!--end of app-->
+
         <script type="text/javascript">
             app.initialize();
         </script>
+        <script>
+        //     $(function() {
+        //         $('.settings-button').on('click', function( e ) {
+        //             Custombox.open({
+        //                 target: '#settingsModal',
+        //                 overlay: false,
+        //                 effect: 'slide',
+        //                  animation: ['bottom', 'bottom'] 
+        //             });
+        //             e.preventDefault();
+        //         });
+        //     });
+        // </script>
     </body>
 </html>
